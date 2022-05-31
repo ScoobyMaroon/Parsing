@@ -16,3 +16,7 @@ for i in range(len(links)):
         b = b.replace(' ','')
         spisok[a] = b
 print(spisok)
+def main():
+    pass
+if __name__ == '__main__':
+    main()
