@@ -21,7 +21,7 @@ def request(url=str,first_request='',second_request='',product = '',price='',pri
             b = b.replace('a', 'Р')
             b = b.replace('\n', '')
             b = b.replace(' ', '')
-            listok[a] = b
+            listok[a] = b #a
     return print(listok)
 def addaptation(dic):
     a = ['Бристоль','Окей']
