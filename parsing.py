@@ -1,44 +1,50 @@
-import requests
-from bs4 import BeautifulSoup
-dic = {'Бристоль':['https://bristol.ru/search?s=','div','product-card','product-card__title','span','price-tag__price','catalog-price','drive','red+bul','adrenaline']}
+from selenium import webdriver
+import time
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+link = ['https://myspar.ru/catalog/energetiki-kofeynye-napitki/f/brand-is-']
+shop = ['SPAR']
+product = ['adrenaline','black-monster','burn','drive-me','gorilla','red-bull','tornado'] #'adrenaline','black-monster','burn','drive-me','gorilla','red-bull','tornado'
+class Energy:
 
-def request(url=str,first_request='',second_request='',product = '',price='',price2='',title='',spisok=list):
-    listok = {}
-    for i in range(len(spisok)):
-        link = url + spisok[i]
-        print(link)
-        request = requests.get(link).text  # запрос всей страницы
-        soup = BeautifulSoup(request, 'lxml')
-        block = soup.find_all(first_request, product)  # достаем товар
-        print(block)
-        for i in range(len(block)):
-            a = block[i].find(first_request, title).text
-            try:
-                b = block[i].find(second_request, price).text # достаем цену
-            except:
-                b = block[i].find(second_request, price2).text
-            b = b.replace('a', 'Р')
-            b = b.replace('\n', '')
-            b = b.replace(' ', '')
-            listok[a] = b #a
-    return print(listok)
-def addaptation(dic):
-    a = ['Бристоль']
-    for i in range(len(a)):
-        b = dic[a[i]]
-
-        url = b [0]
-        first = b[1]
-        product = b[2]
-        title = b[3]
-        second = b[4]
-        price = b[5]
-        price2 = b[6]
-        for i in range(7):
+    def __init__(self,b=list):
+        for i in range(2):
             del b[0]
-        print(b)
-        print(url,first,second)
-        print(b)
-        request(url,first,second,product,price,price2,title,b)
+        del b[-1]
+        if b[-2] == 'ж/б' or b[-2] == 'Ж/Б':
+            del b[-2]
+        price = b[-1]
+        price = price.replace('руб.', '')
+        price = int(price) / 100
+        self.price = format(price, '.2f')
+        v = b[-2]
+        v = v.replace('л', '')
+        self.v = float(v.replace(',', '.'))
+        for i in range(2):
+            del b[-1]
+        name = ''
+        for i in b:
+            name += f'{i} '
+        self.name = name
+    def __str__(self):
+        return f'{self.name} {self.price}'
 
-addaptation(dic)
+def connection(link):
+    driver = webdriver.Chrome()
+    driver.get(link)
+    driver.fullscreen_window()
+    return driver
+def get_products(driver):
+    d = []
+    a = driver.find_elements_by_class_name('catalog-tile')
+    for i in a:
+        print(i.text.split())
+        d.append(Energy(i.text.split()))
+    return d
+def create_url(link1,product):
+
+    url = link1 + product
+    d = (get_products(connection(url)))
+    return d
+
+
