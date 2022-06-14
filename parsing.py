@@ -87,7 +87,22 @@ def mess(itog):
     mess = ''
     for i in itog:
         for g in i:
-           mess +=f'{g}\n\n'
+           sticker = ''
+           if g.name[:10] == 'Adrenaline':
+               sticker = '🍸'
+           if g.name[:5] == 'Black':
+               sticker = '😈'
+           if g.name[:4] == 'Burn':
+               sticker='🌴'
+           if g.name[:5] == 'Drive':
+               sticker='⚡'
+           if g.name[:7] == 'Gorilla':
+               sticker='🦍'
+           if g.name[:8] == 'Red Bull':
+               sticker='🐅'
+           if g.name[:7] == 'Торнадо':
+               sticker='🌪'
+           mess +=f'{sticker}{g}\n\n'
     return mess
 def start(shop,product):
     itog = []
